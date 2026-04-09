@@ -27,8 +27,8 @@ jobs:
 
     - name: Securtiy check
       run: |
-         safety check
+        safety check
 
     - name Run tests
       run: |
-          pytest
+        pytest
