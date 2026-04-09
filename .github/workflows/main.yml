@@ -1,13 +1,30 @@
-name: Hello Workflow
+name: myworkflow
 
 on:
   push:
-    branches:
-      - main
-
+    branches: ["main"]
+  pull request:
+    branches: ["main"]
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Hello
-        run: echo "Pipeline is triggered!"
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: Setup-python@v5
+      with: 
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        flake8
+
+    - name: Securtiy check
+       run: |
+         safety check
+
+    - name Run tests
+        run: |
+          pytest
