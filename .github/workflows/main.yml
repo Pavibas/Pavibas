@@ -26,9 +26,9 @@ jobs:
         flake8
 
     - name: Securtiy check
-       run: |
+      run: |
          safety check
 
     - name Run tests
-        run: |
+      run: |
           pytest
