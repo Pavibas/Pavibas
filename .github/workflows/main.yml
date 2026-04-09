@@ -29,6 +29,6 @@ jobs:
       run: |
         safety check
 
-    - name Run tests
+    - name: Run tests
       run: |
         pytest
