@@ -1,0 +1,47 @@
+stages:
+  - install
+  - build
+  - test
+  - deploy
+variables:
+  IMAGE_NAME: my-python-app
+# Install dependencies
+install:
+  stage: install
+  image: python:3.8-slim
+  script:
+    - pip install -r requirement.txt
+test :
+  stage: test
+  image: python:3.10
+  script:
+    - python -m unittest discover || true
+# Build Docker image  
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t $IMAGE_NAME .
+    - docker save $IMAGE_NAME > $IMAGE_NAME.tar
+  artifacts:  
+    paths:
+      - $IMAGE_NAME.tar 
+harden:
+  stage: harden
+  image: docker:latest
+  script:
+    - pip insall safety
+    
+# Deploy to Docker Hub
+deploy:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker load < $IMAGE_NAME.tar
+    - docker run -d -p 5000 $IMAGE_NAME 
+  when: manual
+    
